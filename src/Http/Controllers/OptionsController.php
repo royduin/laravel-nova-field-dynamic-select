@@ -27,12 +27,23 @@ class OptionsController extends Controller
         // https://github.com/whitecube/nova-flexible-content
         if (!$field) {
             foreach ($fields as $updateField) {
+                // Flexible content compatibility:
+                // https://github.com/whitecube/nova-flexible-content
                 if ($updateField->component == 'nova-flexible-content') {
                     foreach ($updateField->meta['layouts'] as $layout) {
                         foreach ($layout->fields() as $layoutField) {
                             if ($layoutField->attribute == $attribute) {
                                 $field = $layoutField;
                             }
+                        }
+                    }
+
+                    // Dependency container compatibility:
+                    // https://github.com/epartment/nova-dependency-container
+                } elseif ($updateField->component == 'nova-dependency-container') {
+                    foreach ($updateField->meta['fields'] as $layoutField) {
+                        if ($layoutField->attribute == $attribute) {
+                            $field = $layoutField;
                         }
                     }
                 }
