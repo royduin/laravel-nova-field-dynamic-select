@@ -7,7 +7,7 @@ Field is based on [nova-belongs-to-dependency](https://github.com/manmohanjit/no
 ## Installation
 
 ```
-composer require royduin/laravel-nova-field-dynamic-select
+composer require kayacekovic/laravel-nova-field-dynamic-select
 ```
 
 ## Usage
