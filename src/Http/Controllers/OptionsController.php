@@ -22,9 +22,7 @@ class OptionsController extends Controller
             : $resource->updateFields($request);
 
         $field = $fields->findFieldByAttribute($attribute);
-
-        // Flexible content compatibility:
-        // https://github.com/whitecube/nova-flexible-content
+        
         if (!$field) {
             foreach ($fields as $updateField) {
                 // Flexible content compatibility:
