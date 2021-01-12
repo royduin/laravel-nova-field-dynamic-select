@@ -22,7 +22,7 @@ class OptionsController extends Controller
             : $resource->updateFields($request);
 
         $field = $fields->findFieldByAttribute($attribute);
-        
+
         if (!$field) {
             foreach ($fields as $updateField) {
                 // Flexible content compatibility:
