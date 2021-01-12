@@ -20,26 +20,6 @@ class DynamicSelect extends Field
         return parent::resolve($resource, $attribute);
     }
 
-    public function placheholder($placeholder = 'Pick a value')
-    {
-        return $this->withMeta(['placeholder' => $placeholder]);
-    }
-
-    public function selectLabel($selectLabel = 'Press enter to select')
-    {
-        return $this->withMeta(['selectLabel' => $selectLabel]);
-    }
-
-    public function deselectLabel($deselectLabel = 'Press enter to remove')
-    {
-        return $this->withMeta(['deselectLabel' => $deselectLabel]);
-    }
-
-    public function selectedLabel($selectedLabel = 'Selected')
-    {
-        return $this->withMeta(['selectedLabel' => $selectedLabel]);
-    }
-
     public function meta()
     {
         $this->meta = parent::meta();
@@ -47,6 +27,10 @@ class DynamicSelect extends Field
             'options' => $this->getOptions($this->dependentValues),
             'dependsOn' => $this->getDependsOn(),
             'dependValues' => count($this->dependentValues) ? $this->dependentValues :  new \ArrayObject(),
+            'placeholder' => __('Pick a value'),
+            'selectLabel' => __('Press enter to select'),
+            'deselectLabel' => __('Press enter to remove'),
+            'selectedLabel' => __('Selected')
         ], $this->meta);
     }
 }
