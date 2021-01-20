@@ -36,9 +36,9 @@ class OptionsController extends Controller
                             }
                         }
                     }
-                  
-                    // Dependency container compatibility:
-                    // https://github.com/epartment/nova-dependency-container
+
+                // Dependency container compatibility:
+                // https://github.com/epartment/nova-dependency-container
                 } elseif ($updateField->component == 'nova-dependency-container') {
                     foreach ($updateField->meta['fields'] as $layoutField) {
                         if ($layoutField->attribute === $attribute) {
@@ -46,8 +46,8 @@ class OptionsController extends Controller
                         }
                     }
 
-                    // Conditional container compatibility:
-                    // https://github.com/dcasia/conditional-container
+                // Conditional container compatibility:
+                // https://github.com/dcasia/conditional-container
                 } elseif ($updateField->component === 'conditional-container') {
                     foreach ($updateField->fields as $layouts) {
                         if ($layouts->component === 'nova-flexible-content') {
