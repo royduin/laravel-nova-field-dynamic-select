@@ -36,7 +36,7 @@ class OptionsController extends Controller
                             }
                         }
                     }
-
+                  
                     // Dependency container compatibility:
                     // https://github.com/epartment/nova-dependency-container
                 } elseif ($updateField->component == 'nova-dependency-container') {
