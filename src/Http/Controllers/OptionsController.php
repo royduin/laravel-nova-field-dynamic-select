@@ -17,31 +17,47 @@ class OptionsController extends Controller
 
         // Nova tabs compatibility:
         // https://github.com/eminiarts/nova-tabs
-        $fields = method_exists($resource, 'parentUpdateFields')
-            ? $resource->parentUpdateFields($request)
-            : $resource->updateFields($request);
+        if (method_exists($resource, 'parentUpdateFields')) {
+            $fields = $resource->parentUpdateFields($request);
+            $field = $fields->findFieldByAttribute($attribute);
+        } else {
+            $fields = $resource->fields($request);
+        }
 
-        $field = $fields->findFieldByAttribute($attribute);
-
-        if (!$field) {
+        if (!isset($field)) {
             foreach ($fields as $updateField) {
                 // Flexible content compatibility:
                 // https://github.com/whitecube/nova-flexible-content
                 if ($updateField->component == 'nova-flexible-content') {
                     foreach ($updateField->meta['layouts'] as $layout) {
                         foreach ($layout->fields() as $layoutField) {
-                            if ($layoutField->attribute == $attribute) {
+                            if ($layoutField->attribute === $attribute) {
                                 $field = $layoutField;
                             }
                         }
                     }
 
-                // Dependency container compatibility:
-                // https://github.com/epartment/nova-dependency-container
+                    // Dependency container compatibility:
+                    // https://github.com/epartment/nova-dependency-container
                 } elseif ($updateField->component == 'nova-dependency-container') {
                     foreach ($updateField->meta['fields'] as $layoutField) {
-                        if ($layoutField->attribute == $attribute) {
+                        if ($layoutField->attribute === $attribute) {
                             $field = $layoutField;
+                        }
+                    }
+
+                    // Conditional container compatibility:
+                    // https://github.com/dcasia/conditional-container
+                } elseif ($updateField->component === 'conditional-container') {
+                    foreach ($updateField->fields as $layouts) {
+                        if ($layouts->component === 'nova-flexible-content') {
+                            foreach ($layouts->meta['layouts'] as $layout) {
+                                foreach ($layout->fields() as $layoutField) {
+                                    if ($layoutField->attribute === $attribute) {
+                                        $field = $layoutField;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
