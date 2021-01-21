@@ -4,6 +4,7 @@
             <multiselect
                 v-model="value"
                 :options="options"
+                :multiple="field.multiselect || false"
                 :searchable="true"
                 :disabled="isReadonly"
                 track-by="value"
@@ -83,8 +84,12 @@ export default {
         setInitialValue() {
             this.options = this.field.options;
 
-            if(this.field.value) {
-                this.value = this.options.find(item => item['value'] == this.field.value);
+            if (this.field.value) {
+                if (this.field.multiselect) {
+                    this.value = this.field.value;
+                } else {
+                    this.value = this.options.find(item => item['value'] == this.field.value);
+                }
             }
         },
 
@@ -92,10 +97,20 @@ export default {
          * Fill the given FormData object with the field's internal value.
          */
         fill(formData) {
-            formData.append(
-                this.field.attribute,
-                typeof this.value == 'undefined' || !this.value ? '' : this.value.value
-            )
+            if (this.field.multiselect) {
+                if (this.value && this.value.length) {
+                    this.value.forEach((v, i) => {
+                        formData.append(`${this.field.attribute}[${i}]`, v.value);
+                    });
+                } else {
+                    formData.append(this.field.attribute, '');
+                }
+            } else {
+                formData.append(
+                    this.field.attribute,
+                    typeof this.value == 'undefined' || !this.value ? '' : this.value.value
+                )
+            }
         },
 
         /**
