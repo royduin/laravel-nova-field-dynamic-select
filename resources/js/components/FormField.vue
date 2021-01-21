@@ -100,7 +100,7 @@ export default {
             if (this.field.multiselect) {
                 if (this.value && this.value.length) {
                     this.value.forEach((v, i) => {
-                        formData.append(`${this.field.attribute}[${i}]`, v.value);
+                        formData.append(`${this.field.attribute}[${i}]`, JSON.stringify(v));
                     });
                 } else {
                     formData.append(this.field.attribute, '');

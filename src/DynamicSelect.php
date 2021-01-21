@@ -4,6 +4,7 @@ namespace Hubertnnn\LaravelNova\Fields\DynamicSelect;
 
 use Hubertnnn\LaravelNova\Fields\DynamicSelect\Traits\DependsOnAnotherField;
 use Hubertnnn\LaravelNova\Fields\DynamicSelect\Traits\HasDynamicOptions;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Field;
 
 class DynamicSelect extends Field
@@ -58,14 +59,37 @@ class DynamicSelect extends Field
                     throw new RuntimeException("{$model}::{$attribute} does not appear to model a BelongsToMany or MorphsToMany.");
                 }
 
+                $values = collect($request->get($attribute))
+                    ->filter(function ($v) {
+                        return $v;
+                    })
+                    ->map(function ($v) {
+                        return json_decode($v)->value;
+                    })->toArray();
+
                 // Sync
-                $relation->sync($request->get($attribute) ?? []);
+                $relation->sync($values ?? []);
             });
         });
 
-        $this->multiselect();
+        $this->multiselect = true;
 
         return $this;
+    }
+
+    protected function fillAttributeFromRequest(Request $request, $requestAttribute, $model, $attribute)
+    {
+        if ($this->multiselect) {
+            $values = $request->input($requestAttribute) ?? null;
+
+            if ($values && !empty($values)) {
+                $values = collect($values)->map(function ($value) {
+                    return json_decode($value);
+                });
+
+                $model->{$attribute} = $values;
+            }
+        }
     }
 
     public function multiselect($multiselect = true)
