@@ -21,7 +21,12 @@ class OptionsController extends Controller
             $fields = $resource->parentUpdateFields($request);
             $field = $fields->findFieldByAttribute($attribute);
         } else {
-            $fields = $resource->fields($request);
+            $fields = $resource->updateFields($request);
+            $field = $fields->findFieldByAttribute($attribute);
+
+            if (!$field) {
+                $fields = $resource->fields($request);
+            }
         }
 
         if (!isset($field)) {
