@@ -24,7 +24,6 @@ export default {
     computed: {
         dynamicField() {
             if (this.field.multiselect) {
-                console.log(this.field)
                 return this.field;
             }
 

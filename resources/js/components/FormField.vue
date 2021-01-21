@@ -4,7 +4,7 @@
             <multiselect
                 v-model="value"
                 :options="options"
-                :multiple="field.multiselect || false"
+                :multiple="field.multiselect"
                 :searchable="true"
                 :disabled="isReadonly"
                 track-by="value"
