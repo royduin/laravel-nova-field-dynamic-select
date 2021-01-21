@@ -5,6 +5,7 @@ namespace Hubertnnn\LaravelNova\Fields\DynamicSelect;
 use RuntimeException;
 use Hubertnnn\LaravelNova\Fields\DynamicSelect\Traits\DependsOnAnotherField;
 use Hubertnnn\LaravelNova\Fields\DynamicSelect\Traits\HasDynamicOptions;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -78,20 +79,22 @@ class DynamicSelect extends Field
         return $this;
     }
 
-    protected function fillAttributeFromRequest(NovaRequest $request, $requestAttribute, $model, $attribute)
+
+    protected function fillAttributeFromRequest(Request $request, $requestAttribute, $model, $attribute)
     {
-        $value = $request->input($requestAttribute) ?? null;
         if ($this->multiselect) {
-            if ($value && !empty($value)) {
-                $values = collect($value)->map(function ($v) {
-                    return json_decode($v);
+            $values = $request->input($requestAttribute) ?? null;
+
+            if ($values && !empty($values)) {
+                $values = collect($values)->map(function ($value) {
+                    return json_decode($value);
                 });
 
                 $model->{$attribute} = $values;
             }
+        } else {
+            $model->{$attribute} = $value;
         }
-
-        $model->{$attribute} = $value;
     }
 
     public function multiselect($multiselect = true)
