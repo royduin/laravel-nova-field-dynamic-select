@@ -93,7 +93,7 @@ class DynamicSelect extends Field
                 $model->{$attribute} = $values;
             }
         } else {
-            $model->{$attribute} = $value;
+            $model->{$attribute} = $request->input($requestAttribute);
         }
     }
 
