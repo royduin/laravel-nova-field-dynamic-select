@@ -13,6 +13,7 @@
                 :selectLabel="field.selectLabel"
                 :deselectLabel="field.deselectLabel"
                 :selectedLabel="field.selectedLabel"
+                :loading="isLoading"
                 @input="onChange">
             </multiselect>
         </template>
@@ -31,6 +32,7 @@ export default {
 
     data() {
         return {
+            isLoading: false,
             defaultValue: null,
             options: []
         };
@@ -152,12 +154,14 @@ export default {
                 jsoned[i] = depends[i];
             }
 
+            this.isLoading = true;
             const resp = (await Nova.request().post("/nova-vendor/dynamic-select/options/"+this.resourceName, {
                 attribute: this.field.originalAttribute ? this.field.originalAttribute : this.removeFlexibleContentPrefix(this.field.attribute),
                 depends: this.getDependValues(dependsOnValue.value, originalDependsOnAttribute),
                 action: this.field.action,
             })).data;
 
+            this.isLoading = false;
             this.defaultValue = resp.default;
             this.options = resp.options;
 
