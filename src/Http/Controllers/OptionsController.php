@@ -13,7 +13,7 @@ class OptionsController extends Controller
         $attribute = $request->input('attribute');
         $dependValues = $request->input('depends');
 
-        if ($request->has('action')) {
+        if ($request->input('action')) {
             $field = $this->getFieldFromAction($request, $attribute);
         }
         else {
