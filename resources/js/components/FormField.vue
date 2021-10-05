@@ -159,6 +159,7 @@ export default {
                 attribute: this.field.originalAttribute ? this.field.originalAttribute : this.removeFlexibleContentPrefix(this.field.attribute),
                 depends: this.getDependValues(dependsOnValue.value, originalDependsOnAttribute),
                 action: this.field.action,
+                resourceId: this.resourceId
             })).data;
 
             this.isLoading = false;

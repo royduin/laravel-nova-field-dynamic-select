@@ -32,33 +32,44 @@ class OptionsController extends Controller
         ];
     }
 
-    private function getFieldFromResource(NovaRequest $request, $attribute) {
+    private function getFieldFromResource(NovaRequest $request, $attribute)
+    {
         $resource = $request->newResource();
 
         $field = null;
 
-        // Nova tabs compatibility:
-        // https://github.com/eminiarts/nova-tabs
-        if (method_exists($resource, 'parentUpdateFields')) {
-            $fields = $resource->parentUpdateFields($request);
-            $field = $fields->findFieldByAttribute($attribute);
+        if (is_null($request->resourceId)) {
+            // creating
+            if (method_exists($resource, 'parentCreationFields')) {
+                // Nova tabs compatibility:
+                // https://github.com/eminiarts/nova-tabs
+                $fields = $resource->parentCreationFields($request);
+            } else {
+                $fields = $resource->creationFields($request);
+            }
         } else {
-            $fields = $resource->updateFields($request);
-            $field = $fields->findFieldByAttribute($attribute);
-
-            if (!$field) {
-                $fields = $resource->fields($request);
+            // updating
+            if (method_exists($resource, 'parentUpdateFields')) {
+                // Nova tabs compatibility:
+                // https://github.com/eminiarts/nova-tabs
+                $fields = $resource->parentUpdateFields($request);
+            } else {
+                $fields = $resource->updateFields($request);
             }
         }
 
-        if (!isset($field)) {
+        $field = $fields->findFieldByAttribute($attribute);
+
+        if (! $field) {
+            $fields = $resource->fields($request);
             $field = $this->getFieldFromComplexFields($fields, $attribute);
         }
 
         return $field;
     }
 
-    private function getFieldFromAction(NovaRequest $request, $attribute) {
+    private function getFieldFromAction(NovaRequest $request, $attribute)
+    {
         $class = $request->input('action');
         $action = new $class();
 
@@ -74,7 +85,8 @@ class OptionsController extends Controller
         return $field;
     }
 
-    private function getFieldFromComplexFields(array $fields, string $attribute) {
+    private function getFieldFromComplexFields(array $fields, string $attribute)
+    {
         $field = null;
 
         foreach ($fields as $updateField) {
