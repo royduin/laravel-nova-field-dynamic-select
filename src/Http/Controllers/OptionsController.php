@@ -48,7 +48,7 @@ class OptionsController extends Controller
                 $fields = $resource->creationFields($request);
             }
         } else {
-            // creating
+            // updating
             if (method_exists($resource, 'parentUpdateFields')) {
                 // Nova tabs compatibility:
                 // https://github.com/eminiarts/nova-tabs
