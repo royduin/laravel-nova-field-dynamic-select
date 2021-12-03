@@ -103,7 +103,7 @@ class OptionsController extends Controller
             } elseif ($updateField->component == 'nova-dependency-container') {
                 $resolveNestedContainers = function ($novaDependencyContainer, $resolveCallable) use ($attribute, &$field) {
                     foreach ($novaDependencyContainer->meta['fields'] as $layoutField) {
-                        if ($layoutField instanceof NovaDependencyContainer) {
+                        if (is_a($layoutField, '\Epartment\NovaDependencyContainer\NovaDependencyContainer')) {
                             $resolveCallable($layoutField, $resolveCallable);
                         } elseif ($layoutField->attribute === $attribute) {
                             $field = $layoutField;
