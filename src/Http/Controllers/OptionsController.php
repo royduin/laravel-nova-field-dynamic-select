@@ -4,6 +4,7 @@ namespace Hubertnnn\LaravelNova\Fields\DynamicSelect\Http\Controllers;
 
 use Hubertnnn\LaravelNova\Fields\DynamicSelect\DynamicSelect;
 use Illuminate\Routing\Controller;
+use Illuminate\Http\Resources\MergeValue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class OptionsController extends Controller
@@ -78,6 +79,14 @@ class OptionsController extends Controller
         $field = null;
 
         foreach ($fields as $updateField) {
+            if ($updateField instanceof MergeValue) {
+                foreach ($updateField->data as $mergedField) {
+                    if ($mergedField->attribute === $attribute) {
+                        $field = $mergedField;
+                    }
+                }
+            }
+
             // Flexible content compatibility:
             // https://github.com/whitecube/nova-flexible-content
             if ($updateField->component == 'nova-flexible-content') {
@@ -92,11 +101,17 @@ class OptionsController extends Controller
                 // Dependency container compatibility:
                 // https://github.com/epartment/nova-dependency-container
             } elseif ($updateField->component == 'nova-dependency-container') {
-                foreach ($updateField->meta['fields'] as $layoutField) {
-                    if ($layoutField->attribute === $attribute) {
-                        $field = $layoutField;
+                $resolveNestedContainers = function ($novaDependencyContainer, $resolveCallable) use ($attribute, &$field) {
+                    foreach ($novaDependencyContainer->meta['fields'] as $layoutField) {
+                        if ($layoutField instanceof NovaDependencyContainer) {
+                            $resolveCallable($layoutField, $resolveCallable);
+                        } elseif ($layoutField->attribute === $attribute) {
+                            $field = $layoutField;
+                        }
                     }
-                }
+                };
+
+                $resolveNestedContainers($updateField, $resolveNestedContainers);
 
                 // Conditional container compatibility:
                 // https://github.com/dcasia/conditional-container
