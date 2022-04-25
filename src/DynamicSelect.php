@@ -23,7 +23,7 @@ class DynamicSelect extends Field
     public $colors = [
         'highlightBgColor' => '#41b883',
         'highlightTextColor' => '#fff',
-        'selectedHighlightBgColor' => '#41b883',
+        'selectedHighlightBgColor' => '#ff6a6a',
         'selectedHighlightTextColor' => '#fff',
     ];
 
@@ -120,7 +120,7 @@ class DynamicSelect extends Field
      */
     public function colors(array $colors)
     {
-        $this->colors = $colors ?? [];
+        $this->colors = array_merge($this->colors, $colors ?? []);
 
         return $this;
     }
@@ -154,7 +154,7 @@ class DynamicSelect extends Field
             'action' => $this->action,
             'highlightBgColor' => $this->colors['highlightBgColor'] ?? '#41b883',
             'highlightTextColor' => $this->colors['highlightTextColor'] ?? '#fff',
-            'selectedHighlightBgColor' => $this->colors['selectedHighlightBgColor'] ?? '#41b883',
+            'selectedHighlightBgColor' => $this->colors['selectedHighlightBgColor'] ?? '#ff6a6a',
             'selectedHighlightTextColor' => $this->colors['selectedHighlightTextColor'] ?? '#fff',
         ], $this->meta);
     }
