@@ -20,6 +20,12 @@ class DynamicSelect extends Field
     public $labelKey;
     public $multiselect = false;
     public $action = null;
+    public $colors = [
+        'highlightBgColor' => '#41b883',
+        'highlightTextColor' => '#fff',
+        'selectedHighlightBgColor' => '#ff6a6a',
+        'selectedHighlightTextColor' => '#fff',
+    ];
 
     public function resolve($resource, $attribute = null)
     {
@@ -107,6 +113,18 @@ class DynamicSelect extends Field
         return $this;
     }
 
+    /**
+     * Set the colors
+     * @param array{highlightBgColor: string, highlightTextColor: string, selectedHighlightBgColor: string, selectedHighlightTextColor: string} $colors
+     * @return $this
+     */
+    public function colors(array $colors)
+    {
+        $this->colors = array_merge($this->colors, $colors ?? []);
+
+        return $this;
+    }
+
     public function labelKey($labelKey)
     {
         $this->labelKey = $labelKey;
@@ -133,7 +151,11 @@ class DynamicSelect extends Field
             'selectedLabel' => __('Selected'),
             'labelKey' => $this->labelKey,
             'multiselect' => $this->multiselect,
-            'action' => $this->action
+            'action' => $this->action,
+            'highlightBgColor' => $this->colors['highlightBgColor'] ?? '#41b883',
+            'highlightTextColor' => $this->colors['highlightTextColor'] ?? '#fff',
+            'selectedHighlightBgColor' => $this->colors['selectedHighlightBgColor'] ?? '#ff6a6a',
+            'selectedHighlightTextColor' => $this->colors['selectedHighlightTextColor'] ?? '#fff',
         ], $this->meta);
     }
 }

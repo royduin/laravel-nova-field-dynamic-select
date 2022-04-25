@@ -14,8 +14,12 @@
                 :deselectLabel="field.deselectLabel"
                 :selectedLabel="field.selectedLabel"
                 :loading="isLoading"
-                @input="onChange">
-            </multiselect>
+                @input="onChange"
+                :style="`--multiselect-highlight-bg: ${field.highlightBgColor};
+                         --multiselect-highlight-text: ${field.highlightTextColor};
+                         --multiselect-selected-highlight-bg: ${field.selectedHighlightBgColor};
+                         --multiselect-selected-highlight-text: ${field.selectedHighlightTextColor};`"
+            ></multiselect>
         </template>
     </default-field>
 </template>
@@ -155,7 +159,7 @@ export default {
             }
 
             this.isLoading = true;
-            const resp = (await Nova.request().post("/nova-vendor/dynamic-select/options/"+this.resourceName, {
+            const resp = (await Nova.request().post("/nova-vendor/dynamic-select/options/"+this.resourceName+(this.resourceId ? ('/'+this.resourceId) : ''), {
                 attribute: this.field.originalAttribute ? this.field.originalAttribute : this.removeFlexibleContentPrefix(this.field.attribute),
                 depends: this.getDependValues(dependsOnValue.value, originalDependsOnAttribute),
                 action: this.field.action,
@@ -197,5 +201,13 @@ export default {
     }
     .multiselect__select:before {
         content: none !important;
+    }
+    .multiselect__option--selected.multiselect__option--highlight, .multiselect__option--selected.multiselect__option--highlight:after {
+      background: var(--multiselect-selected-highlight-bg);
+      color: var(--multiselect-selected-highlight-text);
+    }
+    .multiselect__option--highlight, .multiselect__option--highlight:after {
+      background: var(--multiselect-highlight-bg);
+      color: var(--multiselect-highlight-text);
     }
 </style>

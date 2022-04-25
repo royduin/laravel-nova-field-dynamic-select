@@ -34,7 +34,11 @@ class OptionsController extends Controller
     }
 
     private function getFieldFromResource(NovaRequest $request, $attribute) {
-        $resource = $request->newResource();
+        $resource = $request->newResourceWith(
+            ($request->resourceId
+                ? $request->findModelQuery()->first()
+                : null) ?? $request->model()
+        );
 
         $field = null;
 
