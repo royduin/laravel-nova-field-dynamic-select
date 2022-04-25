@@ -14,8 +14,12 @@
                 :deselectLabel="field.deselectLabel"
                 :selectedLabel="field.selectedLabel"
                 :loading="isLoading"
-                @input="onChange">
-            </multiselect>
+                @input="onChange"
+                :style="`--multiselect-highlight-bg: ${field.highlightBgColor};
+                         --multiselect-highlight-text: ${field.highlightTextColor};
+                         --multiselect-selected-highlight-bg: ${field.selectedHighlightBgColor};
+                         --multiselect-selected-highlight-text: ${field.selectedHighlightTextColor};`"
+            ></multiselect>
         </template>
     </default-field>
 </template>
@@ -197,5 +201,13 @@ export default {
     }
     .multiselect__select:before {
         content: none !important;
+    }
+    .multiselect__option--selected.multiselect__option--highlight, .multiselect__option--selected.multiselect__option--highlight:after {
+      background: var(--multiselect-selected-highlight-bg);
+      color: var(--multiselect-selected-highlight-text);
+    }
+    .multiselect__option--highlight, .multiselect__option--highlight:after {
+      background: var(--multiselect-highlight-bg);
+      color: var(--multiselect-highlight-text);
     }
 </style>
