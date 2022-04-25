@@ -155,7 +155,7 @@ export default {
             }
 
             this.isLoading = true;
-            const resp = (await Nova.request().post("/nova-vendor/dynamic-select/options/"+this.resourceName, {
+            const resp = (await Nova.request().post("/nova-vendor/dynamic-select/options/"+this.resourceName+(this.resourceId ? ('/'+this.resourceId) : ''), {
                 attribute: this.field.originalAttribute ? this.field.originalAttribute : this.removeFlexibleContentPrefix(this.field.attribute),
                 depends: this.getDependValues(dependsOnValue.value, originalDependsOnAttribute),
                 action: this.field.action,
