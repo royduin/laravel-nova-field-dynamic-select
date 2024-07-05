@@ -1,4 +1,7 @@
-# Dynamic select field for Laravel Nova (maintained repo)
+> [!NOTE]  
+> This is added within Laravel Nova now: https://nova.laravel.com/docs/resources/fields.html#dependent-fields
+
+# Dynamic select field for Laravel Nova
 
 This field allows you to dynamically fill contents of a select based on values in other dynamic select fields.
 
